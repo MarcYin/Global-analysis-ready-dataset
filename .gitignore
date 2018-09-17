@@ -5,3 +5,6 @@
 *xml
 *landsat
 *.vrt
+!
+!*/landsat/TOA_overview.png
+!*/landsat/BOA_overview.png
