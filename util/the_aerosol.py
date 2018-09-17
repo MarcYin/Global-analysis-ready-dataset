@@ -555,26 +555,35 @@ class solve_aerosol(object):
         hy = hy[rmask]
         hx = hx[rmask]
         return hx, hy, hmask, rmask
-        
+    '''    
     def _load_xa_xb_xc_emus(self,):
-        '''
-        Find needed emulators based on the sensor and satellite names.
-        '''
+        #Find needed emulators based on the sensor and satellite names.
 
         xap_emu = glob(self.emus_dir + '/isotropic_%s_emulators_optimization_xap_%s.pkl'%(self.sensor, self.satellite))[0]
         xbp_emu = glob(self.emus_dir + '/isotropic_%s_emulators_optimization_xbp_%s.pkl'%(self.sensor, self.satellite))[0]
         xcp_emu = glob(self.emus_dir + '/isotropic_%s_emulators_optimization_xcp_%s.pkl'%(self.sensor, self.satellite))[0]
         def read_emus(fname):
             if sys.version_info >= (3,0):
-                f = open(fname, mode='rb', encoding = 'latin1')
-                #f = lambda em: pkl.load(open(em, 'rb'), encoding = 'latin1')
+                #f = open(fname, mode='rb', encoding = 'latin1')
+                f = lambda em: pkl.load(open(em, 'rb'), encoding = 'latin1')
             else:
-                f = open(fname, mode='rb')
-                #f = lambda em: pkl.load(open(em, 'rb'))
+                #f = open(fname, mode='rb')
+                f = lambda em: pkl.load(open(em, 'rb'))
             return pkl.load(f)
         gc.disable()
         self.emus = parmap(read_emus, [xap_emu, xbp_emu, xcp_emu])
         gc.enable()
+    '''
+
+    def _load_xa_xb_xc_emus(self,):
+        xap_emu = glob(self.emus_dir + '/isotropic_%s_emulators_correction_xap_%s.pkl'%(self.sensor, self.satellite))[0]
+        xbp_emu = glob(self.emus_dir + '/isotropic_%s_emulators_correction_xbp_%s.pkl'%(self.sensor, self.satellite))[0]
+        xcp_emu = glob(self.emus_dir + '/isotropic_%s_emulators_correction_xcp_%s.pkl'%(self.sensor, self.satellite))[0]
+        if sys.version_info >= (3,0):
+            f = lambda em: pkl.load(open(em, 'rb'), encoding = 'latin1')
+        else:     
+            f = lambda em: pkl.load(open(em, 'rb'))
+        self.emus = parmap(f, [xap_emu, xbp_emu, xcp_emu])
 
     def _get_convolved_toa(self,):       
                                          

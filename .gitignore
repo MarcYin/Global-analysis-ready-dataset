@@ -3,3 +3,5 @@
 *.ipynb_checkpoints
 *tif
 *xml
+*landsat
+*.vrt

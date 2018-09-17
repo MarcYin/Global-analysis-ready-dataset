@@ -210,9 +210,9 @@ class solving_atmo_paras(object):
             #res4 = optimize.minimize(self._cost, p0, jac=, method='COBYLA', options={'disp': True})
             #print res1, res2 #res3
             #psolve = res2
-            self.logger.info(bcolors.GREEN + psolve['message'] + bcolors.ENDC)
-            self.logger.info(bcolors.GREEN + 'Iterations: %d'%psolve['nit'] + bcolors.ENDC)
-            self.logger.info(bcolors.GREEN + 'Function calls: %d'%psolve['nfev'] +bcolors.ENDC)  
+            self.logger.info(bcolors.GREEN + str(psolve['message']) + bcolors.ENDC)
+            self.logger.info(bcolors.GREEN + 'Iterations: %d'%int(psolve['nit']) + bcolors.ENDC)
+            self.logger.info(bcolors.GREEN + 'Function calls: %d'%int(psolve['nfev']) +bcolors.ENDC)  
             self.aot_prior, self.tcwv_prior = psolve['x'].reshape(2, self.num_blocks_x, self.num_blocks_y)
             #self.tcwv_prior = self.tcwv_prior
             if ii != len(shapes)-1:
@@ -252,7 +252,7 @@ class solving_atmo_paras(object):
         if self._coarse_mask.sum() > 1000:
             ret = np.array(parmap(self._helper, inps))
         else:
-            ret = np.array(map(self._helper, inps))
+            ret = np.array(list(map(self._helper, inps)))
         xap_H,  xbp_H,  xcp_H  = ret[:, :, 0] .reshape(3, self.boa.shape[0], len(self.Hx))
         xap_dH, xbp_dH, xcp_dH = ret[:, :, 1:].reshape(3, self.boa.shape[0], len(self.Hx), 2)
         y        = xap_H * self.toa - xbp_H
